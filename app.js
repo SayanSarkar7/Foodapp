@@ -1,7 +1,6 @@
 // WJqnF6nnelZRAJZL
 const express = require('express');
-const mongoose=require('mongoose');
-const emailValidator=require('email-validator');
+const userModel=require('./models/userModel.js')
 
 const app=express();
 
@@ -158,71 +157,6 @@ async function postSignUp(req,res){
     });
 }
 
-// tGJaPxtX61xQBXuU
-const db_link="mongodb+srv://Sayan:12345678Sayan@cluster0.wseih1d.mongodb.net/foodapp?retryWrites=true&w=majority";
-mongoose.connect(db_link)
-.then(function(db){
-    // console.log(db);
-    console.log('db connected');
-})
-.catch(function(err){
-    console.log(err);
-})
-
-const userSchema=mongoose.Schema({
-    name:{
-        type:String,
-        required:true
-    },
-    email:{
-        type:String,
-        required:true,
-        unique:true,
-        validate:function(){
-            return emailValidator.validate(this.email);
-        }
-    },
-    password:{
-        type:String,
-        required:true,
-        minLength:6
-    },
-    confirmPassword:{
-        type:String,
-        required:true,
-        minLength:6,
-        validate:function(){
-            return this.confirmPassword==this.password
-        } 
-    }
-});
-
-// hooks
-
-// userSchema.pre('save',function(){
-//     console.log('before saving in db',this);
-// });
-// userSchema.post('save',function(doc){
-//     console.log('before saving in db',doc);
-// });
-
-userSchema.pre('save',function(){
-    this.confirmPassword=undefined;
-});
-
-// model
-const userModel=mongoose.model('userModel',userSchema);
-module.exports=userModel;
-// (async function createUser(){
-//     let user={
-//         name:'ronaldo',
-//         email:'cr7@gmail.com',
-//         password:'123456',
-//         confirmPassword:'123456'
-//     };
-//     let data=await userModel.create(user);
-//     console.log(data);
-// })();
 
 
 
