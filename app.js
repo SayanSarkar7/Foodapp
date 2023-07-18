@@ -1,6 +1,8 @@
 // WJqnF6nnelZRAJZL
 const express = require('express');
 const mongoose=require('mongoose');
+const emailValidator=require('email-validator');
+
 const app=express();
 
 
@@ -149,7 +151,7 @@ async function postSignUp(req,res){
     let dataObj=req.body;
     let user=await userModel.create(dataObj);
     // let obj=req.body;
-    console.log('backend',user);
+    // console.log('backend',user);
     res.json({
         message:"User signed up successfully.",
         data:user
@@ -175,18 +177,37 @@ const userSchema=mongoose.Schema({
     email:{
         type:String,
         required:true,
-        unique:true
+        unique:true,
+        validate:function(){
+            return emailValidator.validate(this.email);
+        }
     },
     password:{
         type:String,
-        // required:true,
+        required:true,
         minLength:6
     },
     confirmPassword:{
         type:String,
         required:true,
-        minLength:6 
+        minLength:6,
+        validate:function(){
+            return this.confirmPassword==this.password
+        } 
     }
+});
+
+// hooks
+
+// userSchema.pre('save',function(){
+//     console.log('before saving in db',this);
+// });
+// userSchema.post('save',function(doc){
+//     console.log('before saving in db',doc);
+// });
+
+userSchema.pre('save',function(){
+    this.confirmPassword=undefined;
 });
 
 // model
