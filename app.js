@@ -1,5 +1,6 @@
 // WJqnF6nnelZRAJZL
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const userModel=require('./models/userModel.js')
 
 const app=express();
@@ -9,6 +10,7 @@ const app=express();
 app.use(express.json()); // global middleware
 app.use(express.urlencoded({extended:true}));
 app.listen(3000);
+app.use(cookieParser());
 
 // let users={};
 // let users=[
@@ -40,6 +42,16 @@ userRouter
 .post(postUser)
 .patch(updateUser)
 .delete(deleteUser)
+
+
+userRouter
+.route("/getCookies")
+.get(getCookies)
+
+userRouter
+.route("/setCookies")
+.get(setCookies)
+
 
 userRouter
 .route('/:id')
@@ -133,13 +145,6 @@ function middleware2(req,res){
     res.sendFile('/public/index.html',{root:__dirname});
 }
 
-
-
-
-
-
-
-
 function getSignUp(req,res,next){
     console.log('getSignUp called');
     next();
@@ -157,8 +162,16 @@ async function postSignUp(req,res){
     });
 }
 
+function setCookies(req,res){
+    // res.setHeader('Set-Cookie','isLoggedIn=true');
+    res.cookie('isLoggedIn',true,{maxAge:1000*60*60*24, secure:true,httpOnly:true});
+    res.cookie('isPrimeMember',true,{maxAge:1000*60*60*24, secure:true,httpOnly:true});
+    res.send('cookies has been set ');
+}
 
-
-
-// WJqnF6nnelZRAJZL->password
+function getCookies(req,res){
+    let cookies=req.cookies;
+    console.log(cookies);
+    res.send('cookies received');
+}
 
