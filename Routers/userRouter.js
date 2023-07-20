@@ -2,11 +2,12 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const userModel=require('../models/userModel')
 const userRouter=express.Router();
-
+const protectRoute=require('./authHelper');
+ 
 // mini app
 userRouter
 .route('/')
-.get(getUsers) // path specefic middleware
+.get(protectRoute, getUsers) // path specefic middleware
 .post(postUser)
 .patch(updateUser)
 .delete(deleteUser)
@@ -38,13 +39,18 @@ userRouter
 async function getUsers(req,res){
     // console.log(req.query);
     // find()->all records
-    // let user=await userModel.find();
-    let user=await userModel.findOne({name:'ronaldo'})
+    let users=await userModel.find();
+    // let user=await userModel.findOne({name:'ronaldo'})
     // res.send(users);
-    res.json({
-        message:'list of all users',
-        data:user
-    })
+    if(users){
+        return res.json(users);
+        
+    }else{
+        res.json({
+            message:'user not found'
+        })
+    }
+    
 }
 
 function postUser(req,res){
@@ -109,5 +115,7 @@ function getCookies(req,res){
     console.log(cookies);
     res.send('cookies received');
 }
+
+
 
 module.exports=userRouter;
