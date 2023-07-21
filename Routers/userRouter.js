@@ -3,7 +3,7 @@ const cookieParser = require('cookie-parser');
 const userModel=require('../models/userModel')
 const userRouter=express.Router();
 const protectRoute=require('./authHelper');
- 
+
 // mini app
 userRouter
 .route('/')
