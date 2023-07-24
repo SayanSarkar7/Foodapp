@@ -2,8 +2,9 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 
 const userRouter=express.Router();
-const protectRoute=require('./authHelper');
+// const protectRoute=require('./authHelper');
 const {getUser,getAllUser,updateUser,deleteUser,getCookies,setCookies} = require('../controller/userController');
+const {signup,login,isAuthorised,protectRoute}=require('../controller/authController');
 
 // mini app
 // userRouter
@@ -36,21 +37,28 @@ userRouter
 // // Delete
 // app.delete('/user',);
 
+userRouter
+.route('/signup')
+.post(signup)
+
+userRouter
+.route('/login')
+.post(login)
 // /user/1
 // params
 // app.get('/user/:id',)
 
 // profile page
-app.use(protectRoute)
+userRouter.use(protectRoute)
 userRouter
 .route('/userProfile')
 .get(getUser)
 
 
 // admin specific function/midddleware
-application.use(isAuthorised(['admin']));
+userRouter.use(isAuthorised(['admin']));
 userRouter
-.route('')
+.route('/')
 .get(getAllUser)
 
 

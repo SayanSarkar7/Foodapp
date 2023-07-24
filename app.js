@@ -29,11 +29,11 @@ app.use(cookieParser());
                 // ];
                 
 const userRouter=require('./Routers/userRouter.js');
-const authRouter=require('./Routers/authRouter.js');
+// const authRouter=require('./Routers/authRouter.js');
 
 // base route, router to use
 app.use('/user',userRouter);
-app.use('/auth',authRouter);
+// app.use('/auth',authRouter);
 
 
 
