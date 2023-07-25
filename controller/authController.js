@@ -148,6 +148,57 @@ module.exports.protectRoute = async function protectRoute(req, res, next) {
     }
 }
 
+// forget password
+module.exports.forgetPassword = async function forgetPassword(req,res){
+    let {email}=req.body;
+    try{
+        const user=await userModel.findOne({email:email});
+        if(user){
+            // createResetToken is used to create a new token
+            const resetToken=user.createResetToken();
+            http://abc.com/resetpassword/resetToken
+            let resetPasswordLink=`${req.protocol}://${req.get("host")}/resetpassword/${resetToken}`;
+            //send email to the user
+            //nodemailer
+        }
+        else{
+            return res.json({
+                message:"please signup"
+            });
+        }
+    }
+    catch(err){
+        res.status(500).json({
+            message:err.message
+        });
+    }
+}
+
+// reset password
+module.exports.resetpassword = async function resetpassword(req,res){
+    try{
+        const token=req.params.token;
+        let {password,confirmPassword}=req.body;
+        const user = await userModel.findOne({resetToken:token});
+        if(user){
+            //resetPasswordHandler will update user's password in db
+            user.resetPasswordHandler(password, confirmPassword);
+            await user.save();
+        }else{
+            res.json({
+                message:'user not found'
+            })
+        }
+        res.json({
+            message:'user password changed successfully'
+        })
+    }
+    catch(err){
+        res.json({
+            message:err.message
+        })
+    }
+}
 
 // module.exports=authRouter;
 

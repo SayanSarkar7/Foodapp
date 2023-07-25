@@ -48,6 +48,14 @@ userRouter
 // params
 // app.get('/user/:id',)
 
+userRouter
+.route('forgetPassword')
+.post(forgetPassword)
+
+userRouter
+.route('resetPassword/:token')
+.post(resetPassword)
+
 // profile page
 userRouter.use(protectRoute)
 userRouter

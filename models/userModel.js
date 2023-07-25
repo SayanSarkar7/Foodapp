@@ -1,6 +1,7 @@
 //mongoDB
 const mongoose=require('mongoose');
 const bcrypt=require('bcrypt');
+const crypto=require('crypto');
 const emailValidator=require('email-validator');
 
 const db_link="mongodb+srv://Sayan:12345678Sayan@cluster0.wseih1d.mongodb.net/foodapp?retryWrites=true&w=majority";
@@ -47,7 +48,8 @@ const userSchema=mongoose.Schema({
     profileImage:{
         type:String,
         default:'img/users/default.jpeg'
-    }
+    },
+    resetToken:String
 });
 
 // hooks
@@ -70,9 +72,18 @@ userSchema.pre('save',function(){
 //     this.password=hashedString;
 // })
 
+userSchema.methods.createResetToken=function(){
+    // crypto -> npm package to get new 32 bit token
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    this.resetToken=resetToken;
+    return resetToken;
+}
 
-
-
+userSchema.methods.resetPasswordHandler=function(password,confirmPassword){
+    this.password=password;
+    this.confirmPassword=confirmPassword;
+    this.resetToken=undefined;
+}
 
 // model
 const userModel=mongoose.model('userModel',userSchema);
