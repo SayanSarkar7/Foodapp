@@ -44,7 +44,7 @@ const planModel=mongoose.model('planModel',planSchema);
 
 (async function createPlan(){
     let planObj={
-        name:'SuperFood1',
+        name:'SuperFood2',
         duration:30,
         price:1000,
         ratingAverage:5,
