@@ -136,6 +136,12 @@ module.exports.protectRoute = async function protectRoute(req, res, next) {
                 })
             }
         }else{
+            //browser
+            const client=req.get('User-Agent');
+            if(client.includes("Mozilla")==true){
+                return res.redirect('/login');
+            }
+            //postman
             res.json({
                 message:'please login'
             })
@@ -157,7 +163,7 @@ module.exports.forgetPassword = async function forgetPassword(req,res){
             // createResetToken is used to create a new token
             const resetToken=user.createResetToken();
             http://abc.com/resetpassword/resetToken
-            let resetPasswordLink=`${req.protocol}://${req.get("host")}/resetpassword/${resetToken}`;
+            `${req.protocol}://${req.get("host")}/resetpassword/${resetToken}`;
             //send email to the user
             //nodemailer
         }
@@ -198,6 +204,14 @@ module.exports.resetpassword = async function resetpassword(req,res){
             message:err.message
         })
     }
+}
+
+// logout
+module.exports.logout=function logout(req,res){
+    res.cookie('login',' ',{maxAge:1});
+    res.json({
+        message:"user logged out successfully"
+    });
 }
 
 // module.exports=authRouter;

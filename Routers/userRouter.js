@@ -4,7 +4,7 @@ const cookieParser = require('cookie-parser');
 const userRouter=express.Router();
 // const protectRoute=require('./authHelper');
 const {getUser,getAllUser,updateUser,deleteUser,getCookies,setCookies} = require('../controller/userController');
-const {signup,login,isAuthorised,protectRoute}=require('../controller/authController');
+const {signup,login,isAuthorised,protectRoute,logout,forgetPassword,resetpassword}=require('../controller/authController');
 
 // mini app
 // userRouter
@@ -54,7 +54,11 @@ userRouter
 
 userRouter
 .route('resetPassword/:token')
-.post(resetPassword)
+.post(resetpassword)
+
+userRouter
+.route('/logout')
+.get(logout)
 
 // profile page
 userRouter.use(protectRoute)
