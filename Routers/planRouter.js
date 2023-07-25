@@ -1,8 +1,7 @@
 const express=require('express');
 const { protectRoute, isAuthorised } = require('../controller/authController');
 const planRouter = express.Router();
-const {protectRoute} = require('../controller/authController');
-const {getPlan,getAllPlans,createPlan,updatePlan,deletePlan}=require('../controller/planController')
+const {getPlan,getAllPlans,createPlan,updatePlan,deletePlan, top3Plans}=require('../controller/planController')
 
 //all plans
 planRouter.route('/allPlans')
@@ -14,10 +13,19 @@ planRouter.route('/plan/:id')
 .get(getPlan)
 
 // admin and restaurant owner can only create, update or delete plans
-planRouter.use(isAuthorised['admin','restauranowner']);
+planRouter.use(isAuthorised(['admin','restauranowner']));
 
 planRouter
 .route('/crudPlan')
 .post(createPlan)
+
+planRouter
+.route('/crudPlan/:id')
 .patch(updatePlan)
 .delete(deletePlan)
+
+planRouter
+.route('/top3')
+.get(top3Plans)
+
+module.exports=planRouter;

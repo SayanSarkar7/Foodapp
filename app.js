@@ -29,12 +29,14 @@ app.use(cookieParser());
                 // ];
                 
 const userRouter=require('./Routers/userRouter.js');
+const planRouter=require('./Routers/planRouter.js');
 // const authRouter=require('./Routers/authRouter.js');
 
 // base route, router to use
 app.use('/user',userRouter);
+app.use('/plans',planRouter);
 // app.use('/auth',authRouter);
 
-const planModel=require('./models/planModel.js');
+// const planModel=require('./models/planModel.js');
 
 

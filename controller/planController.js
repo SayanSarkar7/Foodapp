@@ -88,6 +88,10 @@ module.exports.updatePlan=async function(req,res){
             plan[keys[i]] = dataToBeUpdated[keys[i]];
         }
         await plan.save();
+        return res.json({
+            message:'plan updated successfully',
+            data:plan
+        })
     }
     catch(err){
         res.status(500).json({
@@ -99,7 +103,7 @@ module.exports.updatePlan=async function(req,res){
 // get top 3 plans
 module.exports.top3Plans=async function top3Plans(req,res){
     try{
-        const plans = await planModel.find().sort({ratingsAverage:-1}).limit(3);
+        const plans = await planModel.find().sort({ratingAverage:-1}).limit(3);
         return res.json({
             message:'top 3 plans',
             data:plans
