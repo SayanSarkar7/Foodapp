@@ -8,7 +8,7 @@ const db_link="mongodb+srv://Sayan:12345678Sayan@cluster0.wseih1d.mongodb.net/fo
 mongoose.connect(db_link)
 .then(function(db){
     // console.log(db);
-    console.log('db connected');
+    console.log('user db connected');
 })
 .catch(function(err){
     console.log(err);
