@@ -1,9 +1,10 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const multer = require('multer');
 
 const userRouter=express.Router();
 // const protectRoute=require('./authHelper');
-const {getUser,getAllUser,updateUser,deleteUser,getCookies,setCookies} = require('../controller/userController');
+const {getUser,getAllUser,updateUser,deleteUser,getCookies,setCookies,updateProfileImage} = require('../controller/userController');
 const {signup,login,isAuthorised,protectRoute,logout,forgetPassword,resetpassword}=require('../controller/authController');
 
 // mini app
@@ -48,6 +49,9 @@ userRouter
 // params
 // app.get('/user/:id',)
 
+// multer for file upload
+
+
 userRouter
 .route('forgetPassword')
 .post(forgetPassword)
@@ -55,6 +59,37 @@ userRouter
 userRouter
 .route('resetPassword/:token')
 .post(resetpassword)
+
+const multerStorage=multer.diskStorage({
+    destination:function(req,res,cb){
+        cb(null, 'public/images')
+    },
+    filename: function(req, file, cb){
+        cb(null, `user-${Date.now()}.jpeg`)
+    }
+})
+
+const filter= function(req, file, cb){
+    if(file.mimetype.startsWith("image")){
+        cb(null,true)
+    }else{
+        cb(new Error("Not an Image! please upload an image"), false)
+    }
+}
+
+const upload = multer({
+    storage: multerStorage,
+    fileFilter: filter
+})
+
+// multer for file upload
+// upload->storage, filter
+
+userRouter.post("/ProfileImage", upload.single('photo') ,updateProfileImage);
+//get request
+userRouter.get('/ProfileImage',(req,res)=>{
+    res.sendFile("D:/Test_dev/BackEnd/Foodapp/multer.html");
+});
 
 userRouter
 .route('/logout')
@@ -65,6 +100,8 @@ userRouter.use(protectRoute)
 userRouter
 .route('/userProfile')
 .get(getUser)
+
+
 
 
 // admin specific function/midddleware

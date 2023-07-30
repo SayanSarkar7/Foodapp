@@ -144,3 +144,8 @@ module.exports.getCookies=function getCookies(req,res){
     res.send('cookies received');
 }
 
+module.exports.updateProfileImage=function updateProfileImage(req,res){
+    res.json({
+        message:'file uploaded successfully'
+    })
+}
